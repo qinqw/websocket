@@ -29,31 +29,52 @@ class Server
 
     public function onOpen($callback=null)
     {
-        $this->serv->on('Open', function($server, $req) {
-            global $reqs;
-            $reqs[]=$req->fd;
-            echo "connection open: ".$req->fd."\n";
-            var_dump(count($reqs));//输出长连接数
-        });
+        if ($callback)
+        {
+            $this->serv->on('Open',$callback);
+        }
+        else
+        {
+            $this->serv->on('Open', function($server, $req) {
+                global $reqs;
+                $reqs[]=$req->fd;
+                echo "connection open: ".$req->fd."\n";
+                var_dump(count($reqs));//输出长连接数
+            });
+        }
     }
 
     public function onMessage($callback=null)
     {
-        $this->serv->on('Message', function($server, $frame) {
-
+        if ($callback)
+        {
+            $this->serv->on('Message',$callback);
+        }
+        else
+        {
+            $this->serv->on('Message', function($server, $frame) {
+                
             $message = $frame->data;
             $sender_fd = $frame->fd;
-          
+            
             var_dump($message);
         
-          });
+            });
+        }   
     }
 
     public function onClose($callback=null)
     {
-        $this->serv->on('Close', function($server, $fd) {
-            echo "connection close: ".$fd."\n";
-        });
+        if ($callback)
+        {
+            $this->serv->on('Close',$callback);
+        }
+        else
+        {
+            $this->serv->on('Close', function($server, $fd) {
+                echo "connection close: ".$fd."\n";
+            });
+        }
     }
 
 }
