@@ -39,7 +39,7 @@ class Server
                 global $reqs;
                 $reqs[]=$req->fd;
                 echo "connection open: ".$req->fd."\n";
-                var_dump(count($reqs));//输出长连接数
+                //var_dump(count($reqs));//输出长连接数
             });
         }
     }
@@ -53,12 +53,8 @@ class Server
         else
         {
             $this->serv->on('Message', function($server, $frame) {
-                
-            $message = $frame->data;
-            $sender_fd = $frame->fd;
-            
-            var_dump($message);
-        
+                echo "message: ".$frame->data;
+                $server->push($frame->fd, json_encode(["hello", "world"]));
             });
         }   
     }
